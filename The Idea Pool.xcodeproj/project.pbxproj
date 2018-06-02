@@ -9,11 +9,12 @@
 /* Begin PBXBuildFile section */
 		963511EE20C1789E00A2F090 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 963511ED20C1789E00A2F090 /* AppDelegate.swift */; };
 		963511F020C1789E00A2F090 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 963511EF20C1789E00A2F090 /* ViewController.swift */; };
-		963511F320C1789E00A2F090 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 963511F120C1789E00A2F090 /* Main.storyboard */; };
 		963511F520C178A000A2F090 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 963511F420C178A000A2F090 /* Assets.xcassets */; };
 		963511F820C178A000A2F090 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 963511F620C178A000A2F090 /* LaunchScreen.storyboard */; };
 		9635120320C178A000A2F090 /* The_Idea_PoolTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9635120220C178A000A2F090 /* The_Idea_PoolTests.swift */; };
 		9635120E20C178A000A2F090 /* The_Idea_PoolUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9635120D20C178A000A2F090 /* The_Idea_PoolUITests.swift */; };
+		9635121C20C1C3AF00A2F090 /* SignUpViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9635121B20C1C3AF00A2F090 /* SignUpViewController.swift */; };
+		964735A520C277240080E0DC /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 964735A420C277240080E0DC /* Main.storyboard */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -37,7 +38,6 @@
 		963511EA20C1789E00A2F090 /* The Idea Pool.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "The Idea Pool.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		963511ED20C1789E00A2F090 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		963511EF20C1789E00A2F090 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
-		963511F220C1789E00A2F090 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		963511F420C178A000A2F090 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		963511F720C178A000A2F090 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		963511F920C178A000A2F090 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -47,6 +47,8 @@
 		9635120920C178A000A2F090 /* The Idea PoolUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "The Idea PoolUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		9635120D20C178A000A2F090 /* The_Idea_PoolUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = The_Idea_PoolUITests.swift; sourceTree = "<group>"; };
 		9635120F20C178A000A2F090 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		9635121B20C1C3AF00A2F090 /* SignUpViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpViewController.swift; sourceTree = "<group>"; };
+		964735A420C277240080E0DC /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -99,7 +101,8 @@
 			children = (
 				963511ED20C1789E00A2F090 /* AppDelegate.swift */,
 				963511EF20C1789E00A2F090 /* ViewController.swift */,
-				963511F120C1789E00A2F090 /* Main.storyboard */,
+				9635121B20C1C3AF00A2F090 /* SignUpViewController.swift */,
+				964735A420C277240080E0DC /* Main.storyboard */,
 				963511F420C178A000A2F090 /* Assets.xcassets */,
 				963511F620C178A000A2F090 /* LaunchScreen.storyboard */,
 				963511F920C178A000A2F090 /* Info.plist */,
@@ -229,9 +232,9 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				964735A520C277240080E0DC /* Main.storyboard in Resources */,
 				963511F820C178A000A2F090 /* LaunchScreen.storyboard in Resources */,
 				963511F520C178A000A2F090 /* Assets.xcassets in Resources */,
-				963511F320C1789E00A2F090 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -256,6 +259,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9635121C20C1C3AF00A2F090 /* SignUpViewController.swift in Sources */,
 				963511F020C1789E00A2F090 /* ViewController.swift in Sources */,
 				963511EE20C1789E00A2F090 /* AppDelegate.swift in Sources */,
 			);
@@ -293,14 +297,6 @@
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
-		963511F120C1789E00A2F090 /* Main.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				963511F220C1789E00A2F090 /* Base */,
-			);
-			name = Main.storyboard;
-			sourceTree = "<group>";
-		};
 		963511F620C178A000A2F090 /* LaunchScreen.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (

@@ -8,13 +8,17 @@
 
 /* Begin PBXBuildFile section */
 		963511EE20C1789E00A2F090 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 963511ED20C1789E00A2F090 /* AppDelegate.swift */; };
-		963511F020C1789E00A2F090 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 963511EF20C1789E00A2F090 /* ViewController.swift */; };
+		963511F020C1789E00A2F090 /* RootViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 963511EF20C1789E00A2F090 /* RootViewController.swift */; };
 		963511F520C178A000A2F090 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 963511F420C178A000A2F090 /* Assets.xcassets */; };
-		963511F820C178A000A2F090 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 963511F620C178A000A2F090 /* LaunchScreen.storyboard */; };
 		9635120320C178A000A2F090 /* The_Idea_PoolTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9635120220C178A000A2F090 /* The_Idea_PoolTests.swift */; };
 		9635120E20C178A000A2F090 /* The_Idea_PoolUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9635120D20C178A000A2F090 /* The_Idea_PoolUITests.swift */; };
 		9635121C20C1C3AF00A2F090 /* SignUpViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9635121B20C1C3AF00A2F090 /* SignUpViewController.swift */; };
 		964735A520C277240080E0DC /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 964735A420C277240080E0DC /* Main.storyboard */; };
+		964735A720C277B20080E0DC /* OpenSans-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 964735A620C277B20080E0DC /* OpenSans-Bold.ttf */; };
+		964735A920C278C50080E0DC /* LogInViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 964735A820C278C50080E0DC /* LogInViewController.swift */; };
+		964735AB20C280D60080E0DC /* IdeaTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 964735AA20C280D60080E0DC /* IdeaTableViewController.swift */; };
+		964735AD20C2811B0080E0DC /* IdeaEditorViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 964735AC20C2811B0080E0DC /* IdeaEditorViewController.swift */; };
+		964735B120C3089F0080E0DC /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 964735B020C3089F0080E0DC /* LaunchScreen.storyboard */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -37,9 +41,8 @@
 /* Begin PBXFileReference section */
 		963511EA20C1789E00A2F090 /* The Idea Pool.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "The Idea Pool.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		963511ED20C1789E00A2F090 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		963511EF20C1789E00A2F090 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		963511EF20C1789E00A2F090 /* RootViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootViewController.swift; sourceTree = "<group>"; };
 		963511F420C178A000A2F090 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
-		963511F720C178A000A2F090 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		963511F920C178A000A2F090 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		963511FE20C178A000A2F090 /* The Idea PoolTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "The Idea PoolTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		9635120220C178A000A2F090 /* The_Idea_PoolTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = The_Idea_PoolTests.swift; sourceTree = "<group>"; };
@@ -49,6 +52,11 @@
 		9635120F20C178A000A2F090 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		9635121B20C1C3AF00A2F090 /* SignUpViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpViewController.swift; sourceTree = "<group>"; };
 		964735A420C277240080E0DC /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
+		964735A620C277B20080E0DC /* OpenSans-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "OpenSans-Bold.ttf"; sourceTree = "<group>"; };
+		964735A820C278C50080E0DC /* LogInViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LogInViewController.swift; sourceTree = "<group>"; };
+		964735AA20C280D60080E0DC /* IdeaTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IdeaTableViewController.swift; sourceTree = "<group>"; };
+		964735AC20C2811B0080E0DC /* IdeaEditorViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IdeaEditorViewController.swift; sourceTree = "<group>"; };
+		964735B020C3089F0080E0DC /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = LaunchScreen.storyboard; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -100,11 +108,15 @@
 			isa = PBXGroup;
 			children = (
 				963511ED20C1789E00A2F090 /* AppDelegate.swift */,
-				963511EF20C1789E00A2F090 /* ViewController.swift */,
+				963511EF20C1789E00A2F090 /* RootViewController.swift */,
 				9635121B20C1C3AF00A2F090 /* SignUpViewController.swift */,
+				964735A820C278C50080E0DC /* LogInViewController.swift */,
+				964735AA20C280D60080E0DC /* IdeaTableViewController.swift */,
+				964735AC20C2811B0080E0DC /* IdeaEditorViewController.swift */,
 				964735A420C277240080E0DC /* Main.storyboard */,
+				964735B020C3089F0080E0DC /* LaunchScreen.storyboard */,
 				963511F420C178A000A2F090 /* Assets.xcassets */,
-				963511F620C178A000A2F090 /* LaunchScreen.storyboard */,
+				964735A620C277B20080E0DC /* OpenSans-Bold.ttf */,
 				963511F920C178A000A2F090 /* Info.plist */,
 			);
 			path = "The Idea Pool";
@@ -233,7 +245,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				964735A520C277240080E0DC /* Main.storyboard in Resources */,
-				963511F820C178A000A2F090 /* LaunchScreen.storyboard in Resources */,
+				964735B120C3089F0080E0DC /* LaunchScreen.storyboard in Resources */,
+				964735A720C277B20080E0DC /* OpenSans-Bold.ttf in Resources */,
 				963511F520C178A000A2F090 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -259,8 +272,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				964735A920C278C50080E0DC /* LogInViewController.swift in Sources */,
+				964735AB20C280D60080E0DC /* IdeaTableViewController.swift in Sources */,
+				964735AD20C2811B0080E0DC /* IdeaEditorViewController.swift in Sources */,
 				9635121C20C1C3AF00A2F090 /* SignUpViewController.swift in Sources */,
-				963511F020C1789E00A2F090 /* ViewController.swift in Sources */,
+				963511F020C1789E00A2F090 /* RootViewController.swift in Sources */,
 				963511EE20C1789E00A2F090 /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -295,17 +311,6 @@
 			targetProxy = 9635120A20C178A000A2F090 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
-
-/* Begin PBXVariantGroup section */
-		963511F620C178A000A2F090 /* LaunchScreen.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				963511F720C178A000A2F090 /* Base */,
-			);
-			name = LaunchScreen.storyboard;
-			sourceTree = "<group>";
-		};
-/* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
 		9635121020C178A000A2F090 /* Debug */ = {

@@ -24,6 +24,7 @@ class RootViewController: UIViewController {
 	
 	var activityIndicatorCount = 0 {
 		didSet {
+			print(activityIndicatorCount)
 			if activityIndicatorCount == 0 {
 				UIViewPropertyAnimator.runningPropertyAnimator(withDuration: 0.25, delay: 0, animations: {
 					self.activityIndicatorView.alpha = 0
@@ -65,6 +66,17 @@ class RootViewController: UIViewController {
 		}
 	}
 	
+	override func showDetailViewController(_ vc: UIViewController, sender: Any?) {
+		let oldVC = self.childViewControllers[0]
+		
+		self.addChildViewController(vc)
+		vc.view.frame = self.containerView.bounds
+		self.transition(from: oldVC, to: vc, duration: 0.25, options: .transitionCrossDissolve, animations: nil) { (complete) in
+			vc.didMove(toParentViewController: self)
+		}
+	}
+	
+
 	struct NetworkError {
 		static let domain = "IdeaPoolNetworkingError"
 		static let userAlreadyExists = NSError(domain: NetworkError.domain , code: 1, userInfo: [NSLocalizedDescriptionKey: NSLocalizedString("User already exists", comment: "User already exists error message")])
@@ -137,7 +149,7 @@ class RootViewController: UIViewController {
 			UIApplication.shared.endBackgroundTask(backgroundTask)
 			backgroundTask = UIBackgroundTaskInvalid
 			self.showActivityIndicator(false)
-			}.resume()
+		}.resume()
 	}
 	
 	func handleSignUpOrLogInResponse(data: Data?, response: URLResponse?, error: Error?) {
@@ -151,10 +163,12 @@ class RootViewController: UIViewController {
 						let refreshToken = json["refresh_token"]
 						
 						if let jwt = jwt, let refreshToken = refreshToken {
+							self.showActivityIndicator(true)
 							DispatchQueue.main.async {
 								self.jwt = jwt
 								self.refreshToken = refreshToken
 								self.getIdeas()
+								self.showActivityIndicator(false)
 							}
 						} else {
 							self.showError(NetworkError.badServerResponse)

@@ -20,6 +20,7 @@
 		964735AD20C2811B0080E0DC /* IdeaEditorViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 964735AC20C2811B0080E0DC /* IdeaEditorViewController.swift */; };
 		964735B120C3089F0080E0DC /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 964735B020C3089F0080E0DC /* LaunchScreen.storyboard */; };
 		967B3A9520C6A31D007277FB /* Idea.swift in Sources */ = {isa = PBXBuildFile; fileRef = 967B3A9420C6A31D007277FB /* Idea.swift */; };
+		968A4A5F20C7E8EF00118979 /* UserDefaultsKeys.swift in Sources */ = {isa = PBXBuildFile; fileRef = 968A4A5E20C7E8EF00118979 /* UserDefaultsKeys.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -59,6 +60,7 @@
 		964735AC20C2811B0080E0DC /* IdeaEditorViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IdeaEditorViewController.swift; sourceTree = "<group>"; };
 		964735B020C3089F0080E0DC /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = LaunchScreen.storyboard; sourceTree = "<group>"; };
 		967B3A9420C6A31D007277FB /* Idea.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Idea.swift; sourceTree = "<group>"; };
+		968A4A5E20C7E8EF00118979 /* UserDefaultsKeys.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDefaultsKeys.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -115,6 +117,7 @@
 				964735A820C278C50080E0DC /* LogInViewController.swift */,
 				964735AA20C280D60080E0DC /* IdeaTableViewController.swift */,
 				964735AC20C2811B0080E0DC /* IdeaEditorViewController.swift */,
+				968A4A5E20C7E8EF00118979 /* UserDefaultsKeys.swift */,
 				967B3A9420C6A31D007277FB /* Idea.swift */,
 				964735A420C277240080E0DC /* Main.storyboard */,
 				964735B020C3089F0080E0DC /* LaunchScreen.storyboard */,
@@ -279,6 +282,7 @@
 				964735A920C278C50080E0DC /* LogInViewController.swift in Sources */,
 				964735AB20C280D60080E0DC /* IdeaTableViewController.swift in Sources */,
 				964735AD20C2811B0080E0DC /* IdeaEditorViewController.swift in Sources */,
+				968A4A5F20C7E8EF00118979 /* UserDefaultsKeys.swift in Sources */,
 				9635121C20C1C3AF00A2F090 /* SignUpViewController.swift in Sources */,
 				963511F020C1789E00A2F090 /* RootViewController.swift in Sources */,
 				963511EE20C1789E00A2F090 /* AppDelegate.swift in Sources */,

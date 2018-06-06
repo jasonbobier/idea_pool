@@ -62,4 +62,13 @@ class IdeaTableViewController: UIViewController, UITableViewDataSource, UITableV
 
 		return cell
 	}
+	
+	override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+		switch segue.identifier {
+		case "addItem":
+			(segue.destination as! IdeaEditorViewController).idea = Idea(id: "", content: "", impact: 10, ease: 10, confidence: 10)
+		default:
+			break
+		}
+	}
 }

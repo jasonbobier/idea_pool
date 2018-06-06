@@ -18,6 +18,8 @@ class SignUpViewController: UIViewController {
 	override func viewDidLoad() {
 		super.viewDidLoad()
 		
+		self.emailTextField.text = UserDefaults.standard.string(forKey: UserDefaultsKeys.previousEmailDefaultsKey)
+		self.nameTextField.becomeFirstResponder()
 		self.update(self)
 	}
 	
@@ -60,5 +62,10 @@ class SignUpViewController: UIViewController {
 	
 	@IBAction func resignTextFields(_ sender: Any) {
 		self.view.endEditing(true)
+	}
+	
+	
+	override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+		UserDefaults.standard.set(self.emailTextField.text, forKey: UserDefaultsKeys.previousEmailDefaultsKey)
 	}
 }

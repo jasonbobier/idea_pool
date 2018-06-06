@@ -8,8 +8,8 @@
 
 import Foundation
 
-struct Idea: Codable {
-	var id: String = ""
+struct Idea {
+	var id: String
 	var content: String
 	var impact: Int
 	var ease: Int
@@ -19,7 +19,9 @@ struct Idea: Codable {
 			return Double(self.impact + self.ease + self.confidence) / 3.0
 		}
 	}
-	
+}
+
+extension Idea: Codable {
 	enum EncodingKeys: String, CodingKey {
 		case content
 		case impact

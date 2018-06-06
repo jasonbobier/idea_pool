@@ -10,13 +10,16 @@ import UIKit
 
 class RootViewController: UIViewController {
 	@IBOutlet weak var containerView: UIView!
+	@IBOutlet weak var logOutButton: UIButton!
 	@IBOutlet weak var activityIndicatorBackgroundView: UIView!
 	@IBOutlet weak var activityIndicatorView: UIView!
 	
 	var jwt: String?
-	var refreshToken: String?
-	var ideas: [String:String]?
-	
+	var refreshToken: String? {
+		didSet {
+			self.logOutButton.isHidden = (refreshToken == nil)
+		}
+	}
 	let apiBaseURL = URL(string: "https://small-project-api.herokuapp.com")!
 	
 	var activityIndicatorCount = 0 {
@@ -151,7 +154,7 @@ class RootViewController: UIViewController {
 							DispatchQueue.main.async {
 								self.jwt = jwt
 								self.refreshToken = refreshToken
-//								self.getIdeas()
+								self.getIdeas()
 							}
 						} else {
 							self.showError(NetworkError.badServerResponse)
@@ -168,6 +171,41 @@ class RootViewController: UIViewController {
 				self.showError(NetworkError.badServerResponse)
 			}
 		}
+	}
+	
+	@IBAction func logOut(_ sender: Any) {
+		var request = URLRequest(url: self.apiBaseURL.appendingPathComponent("access-tokens"))
+		
+		request.httpMethod = "DELETE"
+		request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+		request.addValue(self.jwt!, forHTTPHeaderField: "X-Access-Token")
+		request.httpBody = try! JSONEncoder().encode(["refresh_token": self.refreshToken])
+		
+		var backgroundTask = UIBackgroundTaskInvalid
+		
+		backgroundTask = UIApplication.shared.beginBackgroundTask {
+			UIApplication.shared.endBackgroundTask(backgroundTask)
+			backgroundTask = UIBackgroundTaskInvalid
+		}
+		
+		URLSession.shared.dataTask(with: request) { (data, response, error) in
+			if let error = error {
+				debugPrint("Error logging out: \(error.localizedDescription)")
+			} else {
+				if let response = response as? HTTPURLResponse {
+					if response.statusCode != 204 {
+						debugPrint("Error logging out: \(response)")
+					}
+				} else {
+					debugPrint("Error logging out: Didn't receive HTTPURLResponse")
+				}
+			}
+			UIApplication.shared.endBackgroundTask(backgroundTask)
+			backgroundTask = UIBackgroundTaskInvalid
+		}.resume()
+		self.jwt = nil
+		self.refreshToken = nil
+		self.show(self.storyboard!.instantiateViewController(withIdentifier: "LogInViewController"), sender: self)
 	}
 	
 	func refreshJWT(completion: (() -> Void)?) {
@@ -199,16 +237,16 @@ class RootViewController: UIViewController {
 									completion?()
 								}
 							} else {
-								self.showError(NSError(domain: NSURLErrorDomain, code: NSURLErrorUnknown, userInfo: nil))
+								self.showError(NetworkError.badServerResponse)
 							}
 						} else {
-							self.showError(NSError(domain: NSURLErrorDomain, code: NSURLErrorUnknown, userInfo: nil))
+							self.showError(NetworkError.badServerResponse)
 						}
 					} else {
-						self.showError(NSError(domain: NSURLErrorDomain, code: NSURLErrorUnknown, userInfo: nil))
+						self.showError(NetworkError.badServerResponse)
 					}
 				} else {
-					self.showError(NSError(domain: NSURLErrorDomain, code: NSURLErrorUnknown, userInfo: nil))
+					self.showError(NetworkError.badServerResponse)
 				}
 			}
 
@@ -218,35 +256,64 @@ class RootViewController: UIViewController {
 	}
 	
 	func getIdeas() {
-		self.showActivityIndicator(true)
-		
-		var pageNumber = 1
-		
+		var ideas = [Idea]()
 		var urlComponents = URLComponents(url: self.apiBaseURL.appendingPathComponent("ideas"), resolvingAgainstBaseURL: false)!
 		
-		urlComponents.queryItems = [URLQueryItem(name: "page", value: String(pageNumber))]
-		
-		var request = URLRequest(url: urlComponents.url!)
-		
-		request.httpMethod = "GET"
-		request.addValue("application/json", forHTTPHeaderField: "Content-Type")
-		request.addValue(self.jwt!, forHTTPHeaderField: "X-Access-Token")
-		
-		var backgroundTask = UIBackgroundTaskInvalid
-		
-		backgroundTask = UIApplication.shared.beginBackgroundTask {
-			UIApplication.shared.endBackgroundTask(backgroundTask)
-			backgroundTask = UIBackgroundTaskInvalid
+		func getPageOfIdeas(page: Int) {
+			self.showActivityIndicator(true)
+
+			urlComponents.queryItems = [URLQueryItem(name: "page", value: String(page))]
+			
+			var request = URLRequest(url: urlComponents.url!)
+			
+			request.httpMethod = "GET"
+			request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+			request.addValue(self.jwt!, forHTTPHeaderField: "X-Access-Token")
+			
+			var backgroundTask = UIBackgroundTaskInvalid
+			
+			backgroundTask = UIApplication.shared.beginBackgroundTask {
+				UIApplication.shared.endBackgroundTask(backgroundTask)
+				backgroundTask = UIBackgroundTaskInvalid
+			}
+			
+			URLSession.shared.dataTask(with: request) { (data, response, error) in
+				if let error = error {
+					self.showError(error as NSError)
+				} else {
+					if let data = data, let response = response as? HTTPURLResponse {
+						if response.statusCode == 200 {
+							if let someIdeas = try? JSONDecoder().decode([Idea].self, from: data) {
+								if someIdeas.count == 0 {
+									self.showActivityIndicator(true)
+									DispatchQueue.main.async {
+										let vc = self.storyboard!.instantiateViewController(withIdentifier: "IdeaTableViewController") as! IdeaTableViewController
+										
+										vc.ideas = ideas
+										self.show(vc, sender: self)
+										self.showActivityIndicator(false)
+									}
+								} else {
+									ideas.append(contentsOf: someIdeas)
+									getPageOfIdeas(page: page + 1)
+								}
+							} else {
+								self.showError(NetworkError.badServerResponse)
+							}
+						} else {
+							self.showError(NetworkError.badServerResponse)
+						}
+					} else {
+						self.showError(NetworkError.badServerResponse)
+					}
+				}
+				UIApplication.shared.endBackgroundTask(backgroundTask)
+				backgroundTask = UIBackgroundTaskInvalid
+				self.showActivityIndicator(false)
+			}.resume()
 		}
 		
-		URLSession.shared.dataTask(with: request) { (data, response, error) in
-			
-
-
-			UIApplication.shared.endBackgroundTask(backgroundTask)
-			backgroundTask = UIBackgroundTaskInvalid
-			self.showActivityIndicator(false)
-			}.resume()
+		getPageOfIdeas(page: 1)
 	}
 }
 

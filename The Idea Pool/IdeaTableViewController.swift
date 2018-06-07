@@ -26,6 +26,8 @@ class IdeaTableViewController: UIViewController, UITableViewDataSource, UITableV
 			self.lightbulbImageView.isHidden = true
 			self.gotIdeasLabel.isHidden = true
 		}
+		
+		self.tableView.contentInset.bottom += 95
 	}
 	
 	func insert(idea: Idea) {

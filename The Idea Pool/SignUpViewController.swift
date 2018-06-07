@@ -23,6 +23,12 @@ class SignUpViewController: UIViewController {
 		self.update(self)
 	}
 	
+	override func viewDidDisappear(_ animated: Bool) {
+		super.viewDidDisappear(animated)
+
+		UserDefaults.standard.set(self.emailTextField.text, forKey: UserDefaultsKeys.previousEmailDefaultsKey)
+	}
+	
 	@IBAction func update(_ sender: Any) {
 		if let nameIsEmpty = self.nameTextField.text?.isEmpty, !nameIsEmpty, let emailIsEmpty = self.emailTextField.text?.isEmpty, !emailIsEmpty, self.validatePassword() {
 			self.signUpButton.isEnabled = true
@@ -62,10 +68,5 @@ class SignUpViewController: UIViewController {
 	
 	@IBAction func resignTextFields(_ sender: Any) {
 		self.view.endEditing(true)
-	}
-	
-	
-	override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-		UserDefaults.standard.set(self.emailTextField.text, forKey: UserDefaultsKeys.previousEmailDefaultsKey)
 	}
 }

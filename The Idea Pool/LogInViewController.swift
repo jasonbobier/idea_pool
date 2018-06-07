@@ -27,6 +27,12 @@ class LogInViewController: UIViewController {
 		self.update(self)
 	}
 	
+	override func viewDidDisappear(_ animated: Bool) {
+		super.viewDidDisappear(animated)
+		
+		UserDefaults.standard.set(self.emailTextField.text, forKey: UserDefaultsKeys.previousEmailDefaultsKey)
+	}
+	
 	@IBAction func update(_ sender: Any) {
 		if let emailIsEmpty = self.emailTextField.text?.isEmpty, !emailIsEmpty, let passwordIsEmpty = self.passwordTextField.text?.isEmpty, !passwordIsEmpty {
 			self.logInButton.isEnabled = true
@@ -39,9 +45,5 @@ class LogInViewController: UIViewController {
 	
 	@IBAction func resignTextFields(_ sender: Any) {
 		self.view.endEditing(true)
-	}
-
-	override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-		UserDefaults.standard.set(self.emailTextField.text, forKey: UserDefaultsKeys.previousEmailDefaultsKey)
 	}
 }

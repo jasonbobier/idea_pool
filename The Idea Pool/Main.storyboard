@@ -224,6 +224,9 @@
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="2Q0-Kv-nfc" userLabel="Header">
                                 <rect key="frame" x="0.0" y="0.0" width="375" height="80"/>
                                 <subviews>
+                                    <imageView userInteractionEnabled="NO" alpha="0.0" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="arrow" translatesAutoresizingMaskIntoConstraints="NO" id="iSi-05-amt">
+                                        <rect key="frame" x="17" y="39.5" width="12" height="22"/>
+                                    </imageView>
                                     <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="lightbulb" translatesAutoresizingMaskIntoConstraints="NO" id="QLX-ul-zmR">
                                         <rect key="frame" x="21" y="33" width="35" height="35"/>
                                     </imageView>
@@ -233,7 +236,7 @@
                                         <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <nil key="highlightedColor"/>
                                     </label>
-                                    <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="xM0-t5-sKc">
+                                    <button opaque="NO" alpha="0.0" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="xM0-t5-sKc">
                                         <rect key="frame" x="298" y="35" width="58" height="33"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                         <state key="normal" title="Log out">
@@ -247,10 +250,12 @@
                                 <color key="backgroundColor" red="0.0" green="0.6588235294117647" blue="0.2627450980392157" alpha="1" colorSpace="calibratedRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="bottom" secondItem="QLX-ul-zmR" secondAttribute="bottom" constant="12" id="ER2-yW-Ys9"/>
+                                    <constraint firstItem="iSi-05-amt" firstAttribute="centerY" secondItem="QLX-ul-zmR" secondAttribute="centerY" id="Fuh-BV-S36"/>
                                     <constraint firstAttribute="bottom" secondItem="KfP-5C-k5t" secondAttribute="bottom" constant="16" id="Iuz-IE-0s3"/>
+                                    <constraint firstItem="iSi-05-amt" firstAttribute="leading" secondItem="2Q0-Kv-nfc" secondAttribute="leading" constant="17" id="NP3-iH-hj4"/>
+                                    <constraint firstItem="QLX-ul-zmR" firstAttribute="leading" secondItem="iSi-05-amt" secondAttribute="trailing" constant="-8" id="Pih-d7-uUf"/>
                                     <constraint firstAttribute="trailing" secondItem="xM0-t5-sKc" secondAttribute="trailing" constant="19" id="XGU-yz-2HQ"/>
                                     <constraint firstAttribute="bottom" secondItem="xM0-t5-sKc" secondAttribute="bottom" constant="12" id="hi8-p4-qrf"/>
-                                    <constraint firstItem="QLX-ul-zmR" firstAttribute="leading" secondItem="2Q0-Kv-nfc" secondAttribute="leading" constant="21" id="qcb-rN-yAU"/>
                                     <constraint firstItem="KfP-5C-k5t" firstAttribute="leading" secondItem="2Q0-Kv-nfc" secondAttribute="leading" constant="74" id="qvS-jZ-9zk"/>
                                     <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="KfP-5C-k5t" secondAttribute="trailing" constant="20" symbolic="YES" id="xxt-jb-aFF"/>
                                 </constraints>
@@ -278,8 +283,12 @@
                     <connections>
                         <outlet property="activityIndicatorBackgroundView" destination="ZsW-HN-EEK" id="yTc-yK-RVt"/>
                         <outlet property="activityIndicatorView" destination="K4n-ym-BRl" id="1rc-U5-Pqb"/>
+                        <outlet property="arrowImageView" destination="iSi-05-amt" id="Osu-n0-6gs"/>
+                        <outlet property="arrowImageViewTrailingToLightBulbImageViewLeadingLayoutConstraint" destination="Pih-d7-uUf" id="CvD-FK-n1d"/>
                         <outlet property="containerView" destination="XfB-aK-53j" id="xrc-Hd-raf"/>
+                        <outlet property="lightBulbImageView" destination="QLX-ul-zmR" id="VdX-sw-Sbc"/>
                         <outlet property="logOutButton" destination="xM0-t5-sKc" id="Noy-AK-AC5"/>
+                        <outlet property="titleLabel" destination="KfP-5C-k5t" id="wZG-iU-Xpk"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
@@ -433,11 +442,11 @@
                                 <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <prototypes>
-                                    <tableViewCell contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="IdeaCell" rowHeight="127" id="3Rc-BR-P1t">
-                                        <rect key="frame" x="0.0" y="28" width="375" height="127"/>
+                                    <tableViewCell contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="IdeaCell" rowHeight="130" id="3Rc-BR-P1t">
+                                        <rect key="frame" x="0.0" y="28" width="375" height="130"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="3Rc-BR-P1t" id="Zpg-8h-Dlc">
-                                            <rect key="frame" x="0.0" y="0.0" width="375" height="127"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="375" height="130"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <view tag="1" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="bsL-ED-zHK" userLabel="Bordered View">
@@ -456,12 +465,15 @@
                                                                 <constraint firstAttribute="width" constant="32" id="yi5-tR-tsm"/>
                                                             </constraints>
                                                             <state key="normal" image="edit_cell"/>
+                                                            <connections>
+                                                                <action selector="editOrDeleteIdea:" destination="ibt-nq-vtZ" eventType="touchUpInside" id="Mpq-em-nA0"/>
+                                                            </connections>
                                                         </button>
                                                         <view tag="2" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="RAi-MD-LNq">
                                                             <rect key="frame" x="10" y="44" width="331" height="1"/>
                                                             <color key="backgroundColor" red="0.59215686274509804" green="0.59215686274509804" blue="0.59215686274509804" alpha="1" colorSpace="calibratedRGB"/>
                                                             <constraints>
-                                                                <constraint firstAttribute="height" constant="1" placeholder="YES" id="jJ1-z0-AM5"/>
+                                                                <constraint firstAttribute="height" constant="1" identifier="cellHeight" id="jJ1-z0-AM5"/>
                                                             </constraints>
                                                         </view>
                                                         <label opaque="NO" userInteractionEnabled="NO" tag="4" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="10" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="qyb-jw-ZpD">
@@ -477,37 +489,37 @@
                                                             <nil key="highlightedColor"/>
                                                         </label>
                                                         <label opaque="NO" userInteractionEnabled="NO" tag="5" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="10" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ayo-sO-GnO">
-                                                            <rect key="frame" x="91" y="59" width="52" height="17"/>
+                                                            <rect key="frame" x="91" y="59.5" width="52" height="17"/>
                                                             <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                             <color key="textColor" red="0.1647058824" green="0.21960784310000001" blue="0.25882352939999997" alpha="1" colorSpace="calibratedRGB"/>
                                                             <nil key="highlightedColor"/>
                                                         </label>
                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Ease" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="OP0-YS-SQq">
-                                                            <rect key="frame" x="85" y="76.5" width="31" height="17"/>
+                                                            <rect key="frame" x="85" y="77" width="31" height="17"/>
                                                             <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                             <color key="textColor" red="0.1647058824" green="0.21960784310000001" blue="0.25882352939999997" alpha="1" colorSpace="calibratedRGB"/>
                                                             <nil key="highlightedColor"/>
                                                         </label>
                                                         <label opaque="NO" userInteractionEnabled="NO" tag="6" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="10" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="zpY-sL-6lA">
-                                                            <rect key="frame" x="164" y="59" width="16" height="17"/>
+                                                            <rect key="frame" x="164" y="59.5" width="16" height="17"/>
                                                             <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                             <color key="textColor" red="0.1647058824" green="0.21960784310000001" blue="0.25882352939999997" alpha="1" colorSpace="calibratedRGB"/>
                                                             <nil key="highlightedColor"/>
                                                         </label>
                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Confidence" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="HdL-JX-WdK">
-                                                            <rect key="frame" x="137" y="76.5" width="75" height="17"/>
+                                                            <rect key="frame" x="137" y="77" width="75" height="17"/>
                                                             <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                             <color key="textColor" red="0.1647058824" green="0.21960784310000001" blue="0.25882352939999997" alpha="1" colorSpace="calibratedRGB"/>
                                                             <nil key="highlightedColor"/>
                                                         </label>
                                                         <label opaque="NO" userInteractionEnabled="NO" tag="7" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="10" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ofQ-7d-aQy">
-                                                            <rect key="frame" x="310" y="59" width="16" height="17"/>
+                                                            <rect key="frame" x="310" y="59.5" width="16" height="17"/>
                                                             <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                             <color key="textColor" red="0.1647058824" green="0.21960784310000001" blue="0.25882352939999997" alpha="1" colorSpace="calibratedRGB"/>
                                                             <nil key="highlightedColor"/>
                                                         </label>
                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Avg." textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="9Bw-YZ-R2N">
-                                                            <rect key="frame" x="310" y="76.5" width="28" height="17"/>
+                                                            <rect key="frame" x="310" y="77" width="28" height="17"/>
                                                             <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                             <color key="textColor" red="0.1647058824" green="0.21960784310000001" blue="0.25882352939999997" alpha="1" colorSpace="calibratedRGB"/>
                                                             <nil key="highlightedColor"/>
@@ -548,7 +560,7 @@
                                             <constraints>
                                                 <constraint firstItem="bsL-ED-zHK" firstAttribute="top" secondItem="Zpg-8h-Dlc" secondAttribute="top" constant="15" id="Y9b-84-ka7"/>
                                                 <constraint firstItem="bsL-ED-zHK" firstAttribute="leading" secondItem="Zpg-8h-Dlc" secondAttribute="leading" constant="12" id="eZf-YQ-KcQ"/>
-                                                <constraint firstAttribute="bottom" secondItem="bsL-ED-zHK" secondAttribute="bottom" id="o50-94-xCd"/>
+                                                <constraint firstAttribute="bottom" secondItem="bsL-ED-zHK" secondAttribute="bottom" constant="3" id="o50-94-xCd"/>
                                                 <constraint firstAttribute="trailing" secondItem="bsL-ED-zHK" secondAttribute="trailing" constant="12" id="wUh-MZ-rMW"/>
                                             </constraints>
                                         </tableViewCellContentView>
@@ -604,7 +616,7 @@
         <!--Idea Editor View Controller-->
         <scene sceneID="OeX-sU-G4o">
             <objects>
-                <viewController storyboardIdentifier="ideaEditorViewController" id="XBb-BD-euQ" customClass="IdeaEditorViewController" customModule="The_Idea_Pool" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="IdeaEditorViewController" id="XBb-BD-euQ" customClass="IdeaEditorViewController" customModule="The_Idea_Pool" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="MLI-f7-hiL">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -624,6 +636,9 @@
                                 <color key="textColor" red="0.16470588235294117" green="0.2196078431372549" blue="0.25882352941176467" alpha="1" colorSpace="calibratedRGB"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="16"/>
                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                                <connections>
+                                    <outlet property="delegate" destination="XBb-BD-euQ" id="4Gg-Df-Q9u"/>
+                                </connections>
                             </textView>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="SOn-YG-Jc5">
                                 <rect key="frame" x="38" y="80" width="300" height="1"/>
@@ -754,6 +769,9 @@
                                 </constraints>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <state key="normal" title="SAVE"/>
+                                <connections>
+                                    <action selector="saveIdea:" destination="kP2-hc-wUn" eventType="touchUpInside" id="zEp-ER-9oD"/>
+                                </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="yfJ-bB-fDN">
                                 <rect key="frame" x="37" y="421" width="300" height="40"/>
@@ -764,6 +782,9 @@
                                 </constraints>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <state key="normal" title="CANCEL"/>
+                                <connections>
+                                    <segue destination="Mdk-eH-GId" kind="unwind" unwindAction="closeIdeaEditorWithSeque:" id="HhI-Sx-1sj"/>
+                                </connections>
                             </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -833,14 +854,18 @@
                     </view>
                     <connections>
                         <outlet property="avgValueLabel" destination="f6W-gg-gJw" id="2fX-YE-f5j"/>
+                        <outlet property="confidenceButton" destination="E19-hx-yWU" id="peT-yi-Ypv"/>
                         <outlet property="confidenceValueLabel" destination="uB7-ll-FQh" id="6hp-HC-yyI"/>
                         <outlet property="contentTextView" destination="XBv-gv-jfi" id="LEn-m4-pqA"/>
+                        <outlet property="easeButton" destination="GV8-QO-eNz" id="f3k-je-RXS"/>
                         <outlet property="easeValueLabel" destination="hph-Iw-Oyy" id="Qdt-nH-660"/>
+                        <outlet property="impactButton" destination="rWy-za-s4u" id="h88-WW-GAJ"/>
                         <outlet property="impactValueLabel" destination="aIV-fB-gIs" id="nmM-zw-4lr"/>
                         <outlet property="saveButton" destination="E9r-PY-PUv" id="WL8-NK-u9Q"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="kP2-hc-wUn" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <exit id="Mdk-eH-GId" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
             <point key="canvasLocation" x="1247" y="763"/>
         </scene>
@@ -877,6 +902,9 @@
                                             </constraints>
                                         </tableViewCellContentView>
                                         <inset key="separatorInset" minX="4" minY="0.0" maxX="4" maxY="0.0"/>
+                                        <connections>
+                                            <segue destination="twO-B9-N74" kind="unwind" unwindAction="popOverValueSelectedWithSegue:" id="9A7-YQ-BIG"/>
+                                        </connections>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationWidth="0.0" id="sXq-vG-bDj">
                                         <rect key="frame" x="0.0" y="44" width="41" height="44"/>
@@ -899,6 +927,9 @@
                                             </constraints>
                                         </tableViewCellContentView>
                                         <inset key="separatorInset" minX="4" minY="0.0" maxX="4" maxY="0.0"/>
+                                        <connections>
+                                            <segue destination="twO-B9-N74" kind="unwind" unwindAction="popOverValueSelectedWithSegue:" id="SM6-yw-YdK"/>
+                                        </connections>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationWidth="0.0" id="7TM-ya-u81">
                                         <rect key="frame" x="0.0" y="88" width="41" height="44"/>
@@ -921,6 +952,9 @@
                                             </constraints>
                                         </tableViewCellContentView>
                                         <inset key="separatorInset" minX="4" minY="0.0" maxX="4" maxY="0.0"/>
+                                        <connections>
+                                            <segue destination="twO-B9-N74" kind="unwind" unwindAction="popOverValueSelectedWithSegue:" id="4SV-Tw-w2t"/>
+                                        </connections>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationWidth="0.0" id="Tmm-pE-Gl1">
                                         <rect key="frame" x="0.0" y="132" width="41" height="44"/>
@@ -943,6 +977,9 @@
                                             </constraints>
                                         </tableViewCellContentView>
                                         <inset key="separatorInset" minX="4" minY="0.0" maxX="4" maxY="0.0"/>
+                                        <connections>
+                                            <segue destination="twO-B9-N74" kind="unwind" unwindAction="popOverValueSelectedWithSegue:" id="0Sh-bk-FPo"/>
+                                        </connections>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationWidth="0.0" id="tNx-i4-QK1">
                                         <rect key="frame" x="0.0" y="176" width="41" height="44"/>
@@ -965,6 +1002,9 @@
                                             </constraints>
                                         </tableViewCellContentView>
                                         <inset key="separatorInset" minX="4" minY="0.0" maxX="4" maxY="0.0"/>
+                                        <connections>
+                                            <segue destination="twO-B9-N74" kind="unwind" unwindAction="popOverValueSelectedWithSegue:" id="hGE-ZV-7KE"/>
+                                        </connections>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationWidth="0.0" id="mQj-p5-N9W">
                                         <rect key="frame" x="0.0" y="220" width="41" height="44"/>
@@ -987,6 +1027,9 @@
                                             </constraints>
                                         </tableViewCellContentView>
                                         <inset key="separatorInset" minX="4" minY="0.0" maxX="4" maxY="0.0"/>
+                                        <connections>
+                                            <segue destination="twO-B9-N74" kind="unwind" unwindAction="popOverValueSelectedWithSegue:" id="zAU-VL-OYc"/>
+                                        </connections>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationWidth="0.0" id="koc-lD-wZP">
                                         <rect key="frame" x="0.0" y="264" width="41" height="44"/>
@@ -1009,6 +1052,9 @@
                                             </constraints>
                                         </tableViewCellContentView>
                                         <inset key="separatorInset" minX="4" minY="0.0" maxX="4" maxY="0.0"/>
+                                        <connections>
+                                            <segue destination="twO-B9-N74" kind="unwind" unwindAction="popOverValueSelectedWithSegue:" id="sZl-eX-hkL"/>
+                                        </connections>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationWidth="0.0" id="fNI-ns-QhY">
                                         <rect key="frame" x="0.0" y="308" width="41" height="44"/>
@@ -1031,6 +1077,9 @@
                                             </constraints>
                                         </tableViewCellContentView>
                                         <inset key="separatorInset" minX="4" minY="0.0" maxX="4" maxY="0.0"/>
+                                        <connections>
+                                            <segue destination="twO-B9-N74" kind="unwind" unwindAction="popOverValueSelectedWithSegue:" id="fM6-bA-kOq"/>
+                                        </connections>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationWidth="0.0" id="uLr-Fc-QEP">
                                         <rect key="frame" x="0.0" y="352" width="41" height="44"/>
@@ -1053,6 +1102,9 @@
                                             </constraints>
                                         </tableViewCellContentView>
                                         <inset key="separatorInset" minX="4" minY="0.0" maxX="4" maxY="0.0"/>
+                                        <connections>
+                                            <segue destination="twO-B9-N74" kind="unwind" unwindAction="popOverValueSelectedWithSegue:" id="l3a-aR-xUg"/>
+                                        </connections>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationWidth="0.0" id="5Da-k1-6PW">
                                         <rect key="frame" x="0.0" y="396" width="41" height="44"/>
@@ -1076,6 +1128,9 @@
                                             </constraints>
                                         </tableViewCellContentView>
                                         <inset key="separatorInset" minX="4" minY="0.0" maxX="4" maxY="0.0"/>
+                                        <connections>
+                                            <segue destination="twO-B9-N74" kind="unwind" unwindAction="popOverValueSelectedWithSeque:" id="a8d-hQ-ZIA"/>
+                                        </connections>
                                     </tableViewCell>
                                 </cells>
                             </tableViewSection>
@@ -1090,11 +1145,13 @@
                     <size key="freeformSize" width="41" height="440"/>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="WLc-fC-ZCj" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <exit id="twO-B9-N74" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
             <point key="canvasLocation" x="2097" y="763"/>
         </scene>
     </scenes>
     <resources>
+        <image name="arrow" width="12" height="22"/>
         <image name="btn_add" width="60" height="60"/>
         <image name="dropdown" width="12" height="6"/>
         <image name="edit_cell" width="4" height="17"/>
@@ -1102,7 +1159,7 @@
         <image name="lightbulb_big" width="70" height="100"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="31B-hF-k9G"/>
+        <segue reference="kK4-xd-dAD"/>
         <segue reference="bcJ-Hu-57u"/>
     </inferredMetricsTieBreakers>
 </document>

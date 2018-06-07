@@ -10,13 +10,17 @@ import UIKit
 
 class IdeaEditorViewController: UIViewController, UIPopoverPresentationControllerDelegate {
 	@IBOutlet weak var contentTextView: UITextView!
+	@IBOutlet weak var impactButton: UIButton!
 	@IBOutlet weak var impactValueLabel: UILabel!
+	@IBOutlet weak var easeButton: UIButton!
 	@IBOutlet weak var easeValueLabel: UILabel!
+	@IBOutlet weak var confidenceButton: UIButton!
 	@IBOutlet weak var confidenceValueLabel: UILabel!
 	@IBOutlet weak var avgValueLabel: UILabel!
 	@IBOutlet weak var saveButton: UIButton!
 	
 	var idea: Idea!
+	var popoverButton: UIButton?
 	
 	override func viewDidLoad() {
 		super.viewDidLoad()
@@ -25,7 +29,7 @@ class IdeaEditorViewController: UIViewController, UIPopoverPresentationControlle
 		self.impactValueLabel.text = String(self.idea.impact)
 		self.easeValueLabel.text = String(self.idea.ease)
 		self.confidenceValueLabel.text = String(self.idea.confidence)
-		self.avgValueLabel.text = String(self.idea.averageScore)
+		self.avgValueLabel.text = NumberFormatter.localizedString(from: self.idea.averageScore as NSNumber, number: .decimal)
 		
 		self.contentTextView.becomeFirstResponder()
 		self.update(self)
@@ -48,6 +52,7 @@ class IdeaEditorViewController: UIViewController, UIPopoverPresentationControlle
 	override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
 		switch segue.identifier {
 		case "popOver":
+			self.popoverButton = sender as? UIButton
 			segue.destination.modalPresentationStyle = .popover
 			segue.destination.popoverPresentationController!.delegate = self
 			segue.destination.popoverPresentationController!.sourceView = sender as! UIButton
@@ -59,5 +64,48 @@ class IdeaEditorViewController: UIViewController, UIPopoverPresentationControlle
 	
 	func adaptivePresentationStyle(for controller: UIPresentationController) -> UIModalPresentationStyle {
 		return .none
+	}
+	
+	@IBAction func popOverValueSelected(segue: UIStoryboardSegue) {
+		if let popoverButton = self.popoverButton, let row = (segue.source as! UITableViewController).tableView.indexPathForSelectedRow?.row {
+			let value = row + 1
+			switch popoverButton {
+			case self.impactButton:
+				self.idea.impact = value
+				self.impactValueLabel.text = String(value)
+
+			case self.easeButton:
+				self.idea.ease = value
+				self.easeValueLabel.text = String(value)
+
+			case self.confidenceButton:
+				self.idea.confidence = value
+				self.confidenceValueLabel.text = String(value)
+
+			default:
+				break;
+			}
+			
+			self.avgValueLabel.text = NumberFormatter.localizedString(from: self.idea.averageScore as NSNumber, number: .decimal)
+		}
+	}
+}
+
+extension IdeaEditorViewController: UITextViewDelegate {
+	func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
+		guard let textViewText = textView.text, let range = Range(range, in: textViewText) else {
+			return false
+		}
+		
+		guard (textViewText.count - textViewText[range].count + text.count) < 256 else {
+			return false
+		}
+		
+		return true
+	}
+	
+	func textViewDidChange(_ textView: UITextView) {
+		self.idea.content = textView.text
+		self.update(self)
 	}
 }

@@ -10,21 +10,19 @@ import UIKit
 
 class RootViewController: UIViewController {
 	@IBOutlet weak var containerView: UIView!
+	@IBOutlet weak var arrowImageView: UIImageView!
+	@IBOutlet weak var arrowImageViewTrailingToLightBulbImageViewLeadingLayoutConstraint: NSLayoutConstraint!
+	@IBOutlet weak var lightBulbImageView: UIImageView!
+	@IBOutlet weak var titleLabel: UILabel!
 	@IBOutlet weak var logOutButton: UIButton!
 	@IBOutlet weak var activityIndicatorBackgroundView: UIView!
 	@IBOutlet weak var activityIndicatorView: UIView!
 	
-	var jwt: String?
-	var refreshToken: String? {
-		didSet {
-			self.logOutButton.isHidden = (refreshToken == nil)
-		}
-	}
+	var refreshToken: String?
 	let apiBaseURL = URL(string: "https://small-project-api.herokuapp.com")!
 	
 	var activityIndicatorCount = 0 {
 		didSet {
-			print(activityIndicatorCount)
 			if activityIndicatorCount == 0 {
 				UIViewPropertyAnimator.runningPropertyAnimator(withDuration: 0.25, delay: 0, animations: {
 					self.activityIndicatorView.alpha = 0
@@ -51,6 +49,8 @@ class RootViewController: UIViewController {
 
 	override func viewDidLoad() {
 		super.viewDidLoad()
+		
+		self.updateHeader()
 		// Do any additional setup after loading the view, typically from a nib.
 	}
 
@@ -60,6 +60,7 @@ class RootViewController: UIViewController {
 		oldVC.willMove(toParentViewController: nil)
 		self.addChildViewController(vc)
 		vc.view.frame = self.containerView.bounds
+		self.updateHeader()
 		self.transition(from: oldVC, to: vc, duration: 0.25, options: .transitionCrossDissolve, animations: nil) { (complete) in
 			oldVC.removeFromParentViewController()
 			vc.didMove(toParentViewController: self)
@@ -71,8 +72,49 @@ class RootViewController: UIViewController {
 		
 		self.addChildViewController(vc)
 		vc.view.frame = self.containerView.bounds
+		self.updateHeader()
 		self.transition(from: oldVC, to: vc, duration: 0.25, options: .transitionCrossDissolve, animations: nil) { (complete) in
 			vc.didMove(toParentViewController: self)
+		}
+	}
+	
+	override func unwind(for unwindSegue: UIStoryboardSegue, towardsViewController subsequentVC: UIViewController) {
+		guard (unwindSegue.source is IdeaEditorViewController) && (unwindSegue.destination is IdeaTableViewController) else {
+			return
+		}
+		
+		self.dismiss(from: unwindSegue.source, to: unwindSegue.destination)
+	}
+	
+	func dismiss(from: UIViewController, to: UIViewController) {
+		from.willMove(toParentViewController: nil)
+		self.transition(from: from, to: to, duration: 0.25, options: .transitionCrossDissolve, animations: nil) { (complete) in
+			from.removeFromParentViewController()
+			self.updateHeader()
+		}
+	}
+	
+	func updateHeader() {
+		if self.childViewControllers.last! is IdeaEditorViewController {
+			UIViewPropertyAnimator.runningPropertyAnimator(withDuration: 0.25, delay: 0, animations: {
+				self.arrowImageView.alpha = 1
+				self.lightBulbImageView.frame.origin.x = self.arrowImageView.frame.maxX + 20
+				self.arrowImageViewTrailingToLightBulbImageViewLeadingLayoutConstraint.constant = 20
+				self.titleLabel.alpha = 0
+				self.logOutButton.alpha = 0
+			})
+		} else {
+			UIViewPropertyAnimator.runningPropertyAnimator(withDuration: 0.25, delay: 0, animations: {
+				self.arrowImageView.alpha = 0
+				self.lightBulbImageView.frame.origin.x = self.arrowImageView.frame.maxX - 8
+				self.arrowImageViewTrailingToLightBulbImageViewLeadingLayoutConstraint.constant = -8
+				self.titleLabel.alpha = 1
+				if self.refreshToken == nil {
+					self.logOutButton.alpha = 0
+				} else {
+					self.logOutButton.alpha = 1
+				}
+			})
 		}
 	}
 	
@@ -165,9 +207,8 @@ class RootViewController: UIViewController {
 						if let jwt = jwt, let refreshToken = refreshToken {
 							self.showActivityIndicator(true)
 							DispatchQueue.main.async {
-								self.jwt = jwt
 								self.refreshToken = refreshToken
-								self.getIdeas()
+								self.getIdeas(jwt: jwt)
 								self.showActivityIndicator(false)
 							}
 						} else {
@@ -188,46 +229,53 @@ class RootViewController: UIViewController {
 	}
 	
 	@IBAction func logOut(_ sender: Any) {
-		var request = URLRequest(url: self.apiBaseURL.appendingPathComponent("access-tokens"))
-		
-		request.httpMethod = "DELETE"
-		request.addValue("application/json", forHTTPHeaderField: "Content-Type")
-		request.addValue(self.jwt!, forHTTPHeaderField: "X-Access-Token")
-		request.httpBody = try! JSONEncoder().encode(["refresh_token": self.refreshToken])
-		
-		var backgroundTask = UIBackgroundTaskInvalid
-		
-		backgroundTask = UIApplication.shared.beginBackgroundTask {
-			UIApplication.shared.endBackgroundTask(backgroundTask)
-			backgroundTask = UIBackgroundTaskInvalid
-		}
-		
-		URLSession.shared.dataTask(with: request) { (data, response, error) in
-			if let error = error {
-				debugPrint("Error logging out: \(error.localizedDescription)")
-			} else {
-				if let response = response as? HTTPURLResponse {
-					if response.statusCode != 204 {
-						debugPrint("Error logging out: \(response)")
+		if let refreshToken = self.refreshToken {
+			self.refreshJWT(refreshToken: refreshToken) { (jwt, error) in
+				if error == nil {
+					var request = URLRequest(url: self.apiBaseURL.appendingPathComponent("access-tokens"))
+					
+					request.httpMethod = "DELETE"
+					request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+					request.addValue(jwt!, forHTTPHeaderField: "X-Access-Token")
+					request.httpBody = try! JSONEncoder().encode(["refresh_token": refreshToken])
+					
+					var backgroundTask = UIBackgroundTaskInvalid
+					
+					backgroundTask = UIApplication.shared.beginBackgroundTask {
+						UIApplication.shared.endBackgroundTask(backgroundTask)
+						backgroundTask = UIBackgroundTaskInvalid
 					}
+					
+					URLSession.shared.dataTask(with: request) { (data, response, error) in
+						if let error = error {
+							debugPrint("Error logging out: \(error.localizedDescription)")
+						} else {
+							if let response = response as? HTTPURLResponse {
+								if response.statusCode != 204 {
+									debugPrint("Error logging out: \(response)")
+								}
+							} else {
+								debugPrint("Error logging out: Didn't receive HTTPURLResponse")
+							}
+						}
+						UIApplication.shared.endBackgroundTask(backgroundTask)
+						backgroundTask = UIBackgroundTaskInvalid
+						}.resume()
 				} else {
-					debugPrint("Error logging out: Didn't receive HTTPURLResponse")
+					debugPrint("Error logging out: Couldn't refresh jwt")
 				}
 			}
-			UIApplication.shared.endBackgroundTask(backgroundTask)
-			backgroundTask = UIBackgroundTaskInvalid
-		}.resume()
-		self.jwt = nil
-		self.refreshToken = nil
+			self.refreshToken = nil
+		}
 		self.show(self.storyboard!.instantiateViewController(withIdentifier: "LogInViewController"), sender: self)
 	}
 	
-	func refreshJWT(completion: (() -> Void)?) {
+	func refreshJWT(refreshToken: String, completion: ((String?, Error?) -> Void)?) {
 		var request = URLRequest(url: self.apiBaseURL.appendingPathComponent("access-tokens/refresh"))
 		
 		request.httpMethod = "POST"
 		request.addValue("application/json", forHTTPHeaderField: "Content-Type")
-		request.httpBody = try! JSONEncoder().encode(["refresh_token": self.refreshToken])
+		request.httpBody = try! JSONEncoder().encode(["refresh_token": refreshToken])
 		
 		var backgroundTask = UIBackgroundTaskInvalid
 		
@@ -237,39 +285,39 @@ class RootViewController: UIViewController {
 		}
 		
 		URLSession.shared.dataTask(with: request) { (data, response, error) in
-			if let error = error {
-				self.showError(error as NSError)
-			} else {
+			var error = error
+			var jwt: String?
+			
+			if error == nil {
 				if let data = data, let response = response as? HTTPURLResponse {
 					if response.statusCode == 200 {
 						if let json = try? JSONDecoder().decode([String:String].self, from: data) {
-							let jwt = json["jwt"]
-							
-							if let jwt = jwt {
-								DispatchQueue.main.async {
-									self.jwt = jwt
-									completion?()
-								}
-							} else {
-								self.showError(NetworkError.badServerResponse)
+							jwt = json["jwt"]
+							if jwt == nil {
+								error = NetworkError.badServerResponse
 							}
 						} else {
-							self.showError(NetworkError.badServerResponse)
+							error = NetworkError.badServerResponse
 						}
 					} else {
-						self.showError(NetworkError.badServerResponse)
+						error = NetworkError.badServerResponse
 					}
 				} else {
-					self.showError(NetworkError.badServerResponse)
+					error = NetworkError.badServerResponse
 				}
 			}
-
+			if error != nil {
+				debugPrint("Error refreshing token: \(error!.localizedDescription)")
+			}
+			DispatchQueue.main.async {
+				completion?(jwt, error)
+			}
 			UIApplication.shared.endBackgroundTask(backgroundTask)
 			backgroundTask = UIBackgroundTaskInvalid
 		}.resume()
 	}
 	
-	func getIdeas() {
+	func getIdeas(jwt: String) {
 		var ideas = [Idea]()
 		var urlComponents = URLComponents(url: self.apiBaseURL.appendingPathComponent("ideas"), resolvingAgainstBaseURL: false)!
 		
@@ -282,7 +330,7 @@ class RootViewController: UIViewController {
 			
 			request.httpMethod = "GET"
 			request.addValue("application/json", forHTTPHeaderField: "Content-Type")
-			request.addValue(self.jwt!, forHTTPHeaderField: "X-Access-Token")
+			request.addValue(jwt, forHTTPHeaderField: "X-Access-Token")
 			
 			var backgroundTask = UIBackgroundTaskInvalid
 			
@@ -328,6 +376,186 @@ class RootViewController: UIViewController {
 		}
 		
 		getPageOfIdeas(page: 1)
+	}
+	
+	@IBAction func saveIdea(_ sender: Any) {
+		let count = self.childViewControllers.count
+
+		if count > 1, let ideaEditorViewController = self.childViewControllers[count - 1] as? IdeaEditorViewController, let ideaTableViewController = self.childViewControllers[count - 2] as? IdeaTableViewController {
+			if ideaEditorViewController.idea.id.isEmpty {
+				self.createIdea(ideaEditorViewController: ideaEditorViewController, ideaTableViewController: ideaTableViewController)
+			} else {
+				self.updateIdea(ideaEditorViewController: ideaEditorViewController, ideaTableViewController: ideaTableViewController)
+			}
+		}
+	}
+	
+	func createIdea(ideaEditorViewController: IdeaEditorViewController, ideaTableViewController: IdeaTableViewController) {
+		if let refreshToken = self.refreshToken {
+			self.showActivityIndicator(true)
+			
+			self.refreshJWT(refreshToken: refreshToken) { (jwt, error) in
+				if error == nil {
+					self.showActivityIndicator(true)
+					
+					var request = URLRequest(url: self.apiBaseURL.appendingPathComponent("ideas"))
+					
+					request.httpMethod = "POST"
+					request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+					request.addValue(jwt!, forHTTPHeaderField: "X-Access-Token")
+					request.httpBody = try! JSONEncoder().encode(ideaEditorViewController.idea)
+					
+					var backgroundTask = UIBackgroundTaskInvalid
+					
+					backgroundTask = UIApplication.shared.beginBackgroundTask {
+						UIApplication.shared.endBackgroundTask(backgroundTask)
+						backgroundTask = UIBackgroundTaskInvalid
+					}
+					
+					URLSession.shared.dataTask(with: request) { (data, response, error) in
+						if let error = error {
+							self.showError(error as NSError)
+						} else {
+							if let data = data, let response = response as? HTTPURLResponse {
+								if response.statusCode == 201 {
+									if let idea = try? JSONDecoder().decode(Idea.self, from: data) {
+										DispatchQueue.main.async {
+											ideaTableViewController.insert(idea: idea)
+											self.dismiss(from: ideaEditorViewController, to: ideaTableViewController)
+										}
+									} else {
+										self.showError(NetworkError.badServerResponse)
+									}
+								} else {
+									self.showError(NetworkError.badServerResponse)
+								}
+							} else {
+								self.showError(NetworkError.badServerResponse)
+							}
+						}
+						
+						UIApplication.shared.endBackgroundTask(backgroundTask)
+						backgroundTask = UIBackgroundTaskInvalid
+						self.showActivityIndicator(false)
+						}.resume()
+				} else {
+					self.showError(NetworkError.badServerResponse)
+				}
+				self.showActivityIndicator(false)
+			}
+		} else {
+			self.showError(NetworkError.badServerResponse)
+		}
+	}
+
+	func updateIdea(ideaEditorViewController: IdeaEditorViewController, ideaTableViewController: IdeaTableViewController) {
+		if let refreshToken = self.refreshToken {
+			self.showActivityIndicator(true)
+			
+			self.refreshJWT(refreshToken: refreshToken) { (jwt, error) in
+				if error == nil {
+					self.showActivityIndicator(true)
+					
+					var request = URLRequest(url: self.apiBaseURL.appendingPathComponent("ideas").appendingPathComponent(ideaEditorViewController.idea.id))
+					
+					request.httpMethod = "PUT"
+					request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+					request.addValue(jwt!, forHTTPHeaderField: "X-Access-Token")
+					request.httpBody = try! JSONEncoder().encode(ideaEditorViewController.idea)
+					
+					var backgroundTask = UIBackgroundTaskInvalid
+					
+					backgroundTask = UIApplication.shared.beginBackgroundTask {
+						UIApplication.shared.endBackgroundTask(backgroundTask)
+						backgroundTask = UIBackgroundTaskInvalid
+					}
+					
+					URLSession.shared.dataTask(with: request) { (data, response, error) in
+						if let error = error {
+							self.showError(error as NSError)
+						} else {
+							if let data = data, let response = response as? HTTPURLResponse {
+								if response.statusCode == 200 {
+									if let idea = try? JSONDecoder().decode(Idea.self, from: data) {
+										DispatchQueue.main.async {
+											ideaTableViewController.insert(idea: idea)
+											self.dismiss(from: ideaEditorViewController, to: ideaTableViewController)
+										}
+									} else {
+										self.showError(NetworkError.badServerResponse)
+									}
+								} else {
+									self.showError(NetworkError.badServerResponse)
+								}
+							} else {
+								self.showError(NetworkError.badServerResponse)
+							}
+						}
+						
+						UIApplication.shared.endBackgroundTask(backgroundTask)
+						backgroundTask = UIBackgroundTaskInvalid
+						self.showActivityIndicator(false)
+						}.resume()
+				} else {
+					self.showError(NetworkError.badServerResponse)
+				}
+				self.showActivityIndicator(false)
+			}
+		} else {
+			self.showError(NetworkError.badServerResponse)
+		}
+	}
+	
+	@IBAction func deleteIdea(_ ideaTableViewController: IdeaTableViewController) {
+		if let refreshToken = self.refreshToken {
+			self.showActivityIndicator(true)
+			
+			self.refreshJWT(refreshToken: refreshToken) { (jwt, error) in
+				if error == nil {
+					self.showActivityIndicator(true)
+					
+					var request = URLRequest(url: self.apiBaseURL.appendingPathComponent("ideas").appendingPathComponent(ideaTableViewController.ideaToDelete!.id))
+					
+					request.httpMethod = "DELETE"
+					request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+					request.addValue(jwt!, forHTTPHeaderField: "X-Access-Token")
+					
+					var backgroundTask = UIBackgroundTaskInvalid
+					
+					backgroundTask = UIApplication.shared.beginBackgroundTask {
+						UIApplication.shared.endBackgroundTask(backgroundTask)
+						backgroundTask = UIBackgroundTaskInvalid
+					}
+					
+					URLSession.shared.dataTask(with: request) { (data, response, error) in
+						if let error = error {
+							self.showError(error as NSError)
+						} else {
+							if let response = response as? HTTPURLResponse {
+								if response.statusCode == 204 {
+									DispatchQueue.main.async {
+										ideaTableViewController.delete(idea: ideaTableViewController.ideaToDelete!)
+									}
+								} else {
+									self.showError(NetworkError.badServerResponse)
+								}
+							} else {
+								self.showError(NetworkError.badServerResponse)
+							}
+						}
+						
+						UIApplication.shared.endBackgroundTask(backgroundTask)
+						backgroundTask = UIBackgroundTaskInvalid
+						self.showActivityIndicator(false)
+						}.resume()
+				} else {
+					self.showError(NetworkError.badServerResponse)
+				}
+				self.showActivityIndicator(false)
+			}
+		} else {
+			self.showError(NetworkError.badServerResponse)
+		}
 	}
 }
 

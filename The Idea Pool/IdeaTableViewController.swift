@@ -13,7 +13,8 @@ class IdeaTableViewController: UIViewController, UITableViewDataSource, UITableV
 	@IBOutlet weak var gotIdeasLabel: UILabel!
 	@IBOutlet weak var tableView: UITableView!
 	
-	var ideas: [Idea]!
+	var ideas = [Idea]()
+	var ideaToDelete: Idea?
 	
 	override func viewDidLoad() {
 		super.viewDidLoad()
@@ -22,9 +23,75 @@ class IdeaTableViewController: UIViewController, UITableViewDataSource, UITableV
 			self.lightbulbImageView.isHidden = false
 			self.gotIdeasLabel.isHidden = false
 		} else {
-			self.lightbulbImageView.isHidden = false
-			self.gotIdeasLabel.isHidden = false
+			self.lightbulbImageView.isHidden = true
+			self.gotIdeasLabel.isHidden = true
 		}
+	}
+	
+	func insert(idea: Idea) {
+		self.tableView?.beginUpdates()
+		if let previousIndex = self.ideas.index(where: { $0.id == idea.id }) {
+			self.ideas.remove(at: previousIndex)
+			self.tableView?.deleteRows(at: [IndexPath(row: previousIndex, section: 0)], with: .automatic)
+		}
+		
+		var index = self.ideas.index { idea.averageScore > $0.averageScore }
+		
+		if index == nil {
+			index = self.ideas.count
+		}
+		self.ideas.insert(idea, at: index!)
+		self.tableView?.insertRows(at: [IndexPath(row: index!, section: 0)], with: .automatic)
+		self.tableView?.endUpdates()
+	}
+	
+	func delete(idea: Idea) {
+		if let previousIndex = self.ideas.index(where: { $0.id == idea.id }) {
+			self.ideas.remove(at: previousIndex)
+			self.tableView?.deleteRows(at: [IndexPath(row: previousIndex, section: 0)], with: .automatic)
+		}
+		self.ideaToDelete = nil
+	}
+	
+	@IBAction func editOrDeleteIdea(_ sender: UIButton?) {
+		
+		
+		let indexPath = self.tableView.indexPathForRow(at: sender!.convert(sender!.bounds.origin, to: self.tableView))!
+		
+		let actions = UIAlertController(title: nil, message: NSLocalizedString("Actions", comment: "Message for edit or delete alert controller"), preferredStyle: .actionSheet)
+		
+		actions.addAction(UIAlertAction(title: NSLocalizedString("Edit", comment:"Edit action title"), style: .default, handler: { (action) in
+			let vc = self.storyboard!.instantiateViewController(withIdentifier: "IdeaEditorViewController") as! IdeaEditorViewController
+			
+			vc.idea = self.ideas[indexPath.row]
+			self.showDetailViewController(vc, sender: self)
+		}))
+		actions.addAction(UIAlertAction(title: NSLocalizedString("Delete", comment: "Delete action title"), style: .destructive, handler: { (action) in
+			self.ideaToDelete = self.ideas[indexPath.row]
+			
+			UIApplication.shared.sendAction(#selector(RootViewController.deleteIdea), to: nil, from: self, for: nil)
+		}))
+		actions.addAction(UIAlertAction(title: NSLocalizedString("Cancel", comment: "Cancel action title"), style: .cancel, handler: nil))
+		
+		self.present(actions, animated: true, completion: nil)
+	}
+	
+	enum Tags: Int {
+		case borderedView = 1
+		case hairlineView = 2
+		case contentLabel = 3
+		case impactLabel = 4
+		case easeLabel = 5
+		case confidenceLabel = 6
+		case avgLabel = 7
+	}
+
+	func set(idea: Idea, for cell: UITableViewCell) {
+		(cell.viewWithTag(Tags.contentLabel.rawValue) as! UILabel).text = idea.content
+		(cell.viewWithTag(Tags.impactLabel.rawValue) as! UILabel).text = String(idea.impact)
+		(cell.viewWithTag(Tags.easeLabel.rawValue) as! UILabel).text = String(idea.ease)
+		(cell.viewWithTag(Tags.confidenceLabel.rawValue) as! UILabel).text = String(idea.confidence)
+		(cell.viewWithTag(Tags.avgLabel.rawValue) as! UILabel).text = NumberFormatter.localizedString(from: idea.averageScore as NSNumber, number: .decimal)
 	}
 	
 	func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -32,15 +99,6 @@ class IdeaTableViewController: UIViewController, UITableViewDataSource, UITableV
 	}
 	
 	func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-		enum Tags: Int {
-			case borderedView = 1
-			case hairlineView = 2
-			case contentLabel = 3
-			case impactLabel = 4
-			case easeLabel = 5
-			case confidenceLabel = 6
-			case avgLabel = 7
-		}
 
 		let idea = self.ideas[indexPath.row]
 		let cell = tableView.dequeueReusableCell(withIdentifier: "IdeaCell", for: indexPath)
@@ -53,13 +111,12 @@ class IdeaTableViewController: UIViewController, UITableViewDataSource, UITableV
 		borderedViewLayer.shadowRadius = (3 / scale)
 		borderedViewLayer.cornerRadius = (5 / scale)
 		
-		cell.viewWithTag(Tags.hairlineView.rawValue)!.heightAnchor.constraint(equalToConstant: (1 / scale)).isActive = true
-		(cell.viewWithTag(Tags.contentLabel.rawValue) as! UILabel).text = idea.content
-		(cell.viewWithTag(Tags.impactLabel.rawValue) as! UILabel).text = String(idea.impact)
-		(cell.viewWithTag(Tags.easeLabel.rawValue) as! UILabel).text = String(idea.ease)
-		(cell.viewWithTag(Tags.confidenceLabel.rawValue) as! UILabel).text = String(idea.confidence)
-		(cell.viewWithTag(Tags.avgLabel.rawValue) as! UILabel).text = String(idea.averageScore)
+		let hairlineViewHeightConstraint = cell.viewWithTag(Tags.hairlineView.rawValue)!.constraints.first { $0.identifier == "cellHeight" }!
 
+		hairlineViewHeightConstraint.constant = 1.0 / scale
+
+		self.set(idea: idea, for: cell)
+		
 		return cell
 	}
 	
@@ -70,5 +127,9 @@ class IdeaTableViewController: UIViewController, UITableViewDataSource, UITableV
 		default:
 			break
 		}
+	}
+	
+	@IBAction func closeIdeaEditor(seque: UIStoryboardSegue) {
+		
 	}
 }

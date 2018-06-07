@@ -67,9 +67,15 @@ class IdeaTableViewController: UIViewController, UITableViewDataSource, UITableV
 			self.showDetailViewController(vc, sender: self)
 		}))
 		actions.addAction(UIAlertAction(title: NSLocalizedString("Delete", comment: "Delete action title"), style: .destructive, handler: { (action) in
-			self.ideaToDelete = self.ideas[indexPath.row]
+			let alert = UIAlertController(title: NSLocalizedString("Are you sure?", comment: "Are you sure alert title"), message: NSLocalizedString("This idea will be permanently deleted.", comment: "Are you sure alert message"), preferredStyle: .alert)
 			
-			UIApplication.shared.sendAction(#selector(RootViewController.deleteIdea), to: nil, from: self, for: nil)
+			alert.addAction(UIAlertAction(title: NSLocalizedString("OK", comment: "OK Alert button"), style: .default, handler: { (action) in
+				self.ideaToDelete = self.ideas[indexPath.row]
+				
+				UIApplication.shared.sendAction(#selector(RootViewController.deleteIdea), to: nil, from: self, for: nil)
+			}))
+			alert.addAction(UIAlertAction(title: NSLocalizedString("Cancel", comment: "Cancel action title"), style: .cancel, handler: nil))
+			self.present(alert, animated: true, completion: nil)
 		}))
 		actions.addAction(UIAlertAction(title: NSLocalizedString("Cancel", comment: "Cancel action title"), style: .cancel, handler: nil))
 		
@@ -103,17 +109,12 @@ class IdeaTableViewController: UIViewController, UITableViewDataSource, UITableV
 		let idea = self.ideas[indexPath.row]
 		let cell = tableView.dequeueReusableCell(withIdentifier: "IdeaCell", for: indexPath)
 		
-		let scale = UIScreen.main.scale
 		let borderedViewLayer = cell.viewWithTag(Tags.borderedView.rawValue)!.layer
 		
 		borderedViewLayer.shadowOpacity = 0.33
-		borderedViewLayer.shadowOffset = CGSize(width: 0, height: (3 / scale))
-		borderedViewLayer.shadowRadius = (3 / scale)
-		borderedViewLayer.cornerRadius = (5 / scale)
-		
-		let hairlineViewHeightConstraint = cell.viewWithTag(Tags.hairlineView.rawValue)!.constraints.first { $0.identifier == "cellHeight" }!
-
-		hairlineViewHeightConstraint.constant = 1.0 / scale
+		borderedViewLayer.shadowOffset = CGSize(width: 0, height: 3)
+		borderedViewLayer.shadowRadius = 3
+		borderedViewLayer.cornerRadius = 5
 
 		self.set(idea: idea, for: cell)
 		

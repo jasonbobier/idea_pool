@@ -51,7 +51,6 @@ class RootViewController: UIViewController {
 		super.viewDidLoad()
 		
 		self.updateHeader()
-		// Do any additional setup after loading the view, typically from a nib.
 	}
 
 	override func show(_ vc: UIViewController, sender: Any?) {
@@ -118,7 +117,6 @@ class RootViewController: UIViewController {
 		}
 	}
 	
-
 	struct NetworkError {
 		static let domain = "IdeaPoolNetworkingError"
 		static let userAlreadyExists = NSError(domain: NetworkError.domain , code: 1, userInfo: [NSLocalizedDescriptionKey: NSLocalizedString("User already exists", comment: "User already exists error message")])
@@ -533,8 +531,10 @@ class RootViewController: UIViewController {
 						} else {
 							if let response = response as? HTTPURLResponse {
 								if response.statusCode == 204 {
+									self.showActivityIndicator(true)
 									DispatchQueue.main.async {
 										ideaTableViewController.delete(idea: ideaTableViewController.ideaToDelete!)
+										self.showActivityIndicator(false)
 									}
 								} else {
 									self.showError(NetworkError.badServerResponse)

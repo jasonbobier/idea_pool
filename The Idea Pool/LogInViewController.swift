@@ -47,3 +47,20 @@ class LogInViewController: UIViewController {
 		self.view.endEditing(true)
 	}
 }
+
+extension LogInViewController: UITextFieldDelegate {
+	func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+		switch textField {
+		case self.emailTextField:
+			self.passwordTextField.becomeFirstResponder()
+			
+		case self.passwordTextField:
+			textField.resignFirstResponder()
+			
+		default:
+			break
+		}
+		
+		return false
+	}
+}

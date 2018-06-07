@@ -70,3 +70,23 @@ class SignUpViewController: UIViewController {
 		self.view.endEditing(true)
 	}
 }
+
+extension SignUpViewController: UITextFieldDelegate {
+	func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+		switch textField {
+		case self.nameTextField:
+			self.emailTextField.becomeFirstResponder()
+			
+		case self.emailTextField:
+			self.passwordTextField.becomeFirstResponder()
+			
+		case self.passwordTextField:
+			textField.resignFirstResponder()
+			
+		default:
+			break
+		}
+
+		return false
+	}
+}

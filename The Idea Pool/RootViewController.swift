@@ -21,6 +21,7 @@ class RootViewController: UIViewController {
 	var refreshToken: String?
 	let apiBaseURL = URL(string: "https://small-project-api.herokuapp.com")!
 	
+	// Show and hide simple activity indicator. Needs message and cancel button for non demo version
 	var activityIndicatorCount = 0 {
 		didSet {
 			if activityIndicatorCount == 0 {
@@ -53,6 +54,7 @@ class RootViewController: UIViewController {
 		self.updateHeader()
 	}
 
+	// Integrate the container with segues
 	override func show(_ vc: UIViewController, sender: Any?) {
 		let oldVC = self.childViewControllers[0]
 		
@@ -85,6 +87,7 @@ class RootViewController: UIViewController {
 		self.dismiss(from: unwindSegue.source, to: unwindSegue.destination)
 	}
 	
+	// Remove the editor. Needs better name
 	func dismiss(from: UIViewController, to: UIViewController) {
 		from.willMove(toParentViewController: nil)
 		self.transition(from: from, to: to, duration: 0.25, options: .transitionCrossDissolve, animations: nil) { (complete) in
@@ -93,6 +96,8 @@ class RootViewController: UIViewController {
 		}
 	}
 	
+	// Change the header depending upon the topmost vc. The interface is strange for the editor because it has a back button too, which is ambiguous.
+	// It isn't enabled now and I would argue to get rid of it. Note that it was never shown begin used in the demo movie.
 	func updateHeader() {
 		if self.childViewControllers.last! is IdeaEditorViewController {
 			UIViewPropertyAnimator.runningPropertyAnimator(withDuration: 0.25, delay: 0, animations: {
@@ -117,6 +122,7 @@ class RootViewController: UIViewController {
 		}
 	}
 	
+	// Simple error handling. Non-demo would need better messages
 	struct NetworkError {
 		static let domain = "IdeaPoolNetworkingError"
 		static let userAlreadyExists = NSError(domain: NetworkError.domain , code: 1, userInfo: [NSLocalizedDescriptionKey: NSLocalizedString("User already exists", comment: "User already exists error message")])
@@ -132,6 +138,9 @@ class RootViewController: UIViewController {
 		}
 	}
 	
+	
+	// Networking functions should be pulled out into their own class in non-demo app. They also need better error handling, secure result checking (i.e. make sure that
+	// the content field doesn't have more than 255 characters, etcc...) and a more consistent interface.
 	@IBAction func signUp(_ sender: Any) {
 		if let signUpViewController = self.childViewControllers[0] as? SignUpViewController {
 			self.signUp(email: signUpViewController.emailTextField.text!, name: signUpViewController.nameTextField.text!, password: signUpViewController.passwordTextField.text!)
@@ -216,6 +225,7 @@ class RootViewController: UIViewController {
 						self.showError(NetworkError.badServerResponse)
 					}
 				} else if response.statusCode == 422 {
+					// I guess this is how the api returns for this issue
 					self.showError(NetworkError.userAlreadyExists)
 				} else {
 					self.showError(NetworkError.badServerResponse)
@@ -268,6 +278,7 @@ class RootViewController: UIViewController {
 		self.show(self.storyboard!.instantiateViewController(withIdentifier: "LogInViewController"), sender: self)
 	}
 	
+	// Without knowing the repercussions, I just call refreshJWT before every call that needs it. That prevents any issues with it begin expired. There may be reasons not to do this though.
 	func refreshJWT(refreshToken: String, completion: ((String?, Error?) -> Void)?) {
 		var request = URLRequest(url: self.apiBaseURL.appendingPathComponent("access-tokens/refresh"))
 		
@@ -315,6 +326,7 @@ class RootViewController: UIViewController {
 		}.resume()
 	}
 	
+	// API docs don't describe how to know when you have all of the ideas. Looks like a zero page works.
 	func getIdeas(jwt: String) {
 		var ideas = [Idea]()
 		var urlComponents = URLComponents(url: self.apiBaseURL.appendingPathComponent("ideas"), resolvingAgainstBaseURL: false)!
@@ -347,6 +359,7 @@ class RootViewController: UIViewController {
 								if someIdeas.count == 0 {
 									self.showActivityIndicator(true)
 									DispatchQueue.main.async {
+										// Normally I wouldn't embed something like this, but good enough for demo
 										let vc = self.storyboard!.instantiateViewController(withIdentifier: "IdeaTableViewController") as! IdeaTableViewController
 										
 										vc.ideas = ideas
@@ -376,6 +389,7 @@ class RootViewController: UIViewController {
 		getPageOfIdeas(page: 1)
 	}
 	
+	// We just use an empty id to signal whether we are adding or updating
 	@IBAction func saveIdea(_ sender: Any) {
 		let count = self.childViewControllers.count
 
@@ -388,6 +402,7 @@ class RootViewController: UIViewController {
 		}
 	}
 	
+	// Again, silly interface here, but good enough for demo
 	func createIdea(ideaEditorViewController: IdeaEditorViewController, ideaTableViewController: IdeaTableViewController) {
 		if let refreshToken = self.refreshToken {
 			self.showActivityIndicator(true)

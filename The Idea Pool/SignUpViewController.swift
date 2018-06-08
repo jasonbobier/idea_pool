@@ -8,6 +8,7 @@
 
 import UIKit
 
+// Validated text with action messages from text controls here, I could just use the delegate as well, but why not mix and match for fun? :)
 class SignUpViewController: UIViewController {
 	@IBOutlet weak var nameTextField: UITextField!
 	@IBOutlet weak var emailTextField: UITextField!

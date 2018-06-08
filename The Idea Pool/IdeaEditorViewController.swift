@@ -8,6 +8,8 @@
 
 import UIKit
 
+// Here we use a delegate for all of the checking... actually, we have to since UITextView doesn't pass value changed actions.
+
 class IdeaEditorViewController: UIViewController, UIPopoverPresentationControllerDelegate {
 	@IBOutlet weak var contentTextView: UITextView!
 	@IBOutlet weak var impactButton: UIButton!

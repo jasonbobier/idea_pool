@@ -8,6 +8,9 @@
 
 import UIKit
 
+// This table breaks interface by using what looks like a 'cell move control' as a button to bring up an action sheet. In a client app, I would argue to get rid
+// of that button and just use a swipe control to delete and a tap to edit (possibly with a detail control). Also the movie showed two different animations
+// for inserting a cell. One if the table was empty (a pop into place animation) and one if the table already had rows. I only did one animation for simplicity.
 class IdeaTableViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
 	@IBOutlet weak var lightbulbImageView: UIImageView!
 	@IBOutlet weak var gotIdeasLabel: UILabel!
@@ -30,6 +33,7 @@ class IdeaTableViewController: UIViewController, UITableViewDataSource, UITableV
 		self.tableView.contentInset.bottom += 95
 	}
 	
+	// We just remove a previous idea with the same id. It simplifies the case where the average would cause a reorder of the list.
 	func insert(idea: Idea) {
 		self.tableView?.beginUpdates()
 		if let previousIndex = self.ideas.index(where: { $0.id == idea.id }) {
@@ -56,8 +60,6 @@ class IdeaTableViewController: UIViewController, UITableViewDataSource, UITableV
 	}
 	
 	@IBAction func editOrDeleteIdea(_ sender: UIButton?) {
-		
-		
 		let indexPath = self.tableView.indexPathForRow(at: sender!.convert(sender!.bounds.origin, to: self.tableView))!
 		
 		let actions = UIAlertController(title: nil, message: NSLocalizedString("Actions", comment: "Message for edit or delete alert controller"), preferredStyle: .actionSheet)
@@ -71,9 +73,11 @@ class IdeaTableViewController: UIViewController, UITableViewDataSource, UITableV
 		actions.addAction(UIAlertAction(title: NSLocalizedString("Delete", comment: "Delete action title"), style: .destructive, handler: { (action) in
 			let alert = UIAlertController(title: NSLocalizedString("Are you sure?", comment: "Are you sure alert title"), message: NSLocalizedString("This idea will be permanently deleted.", comment: "Are you sure alert message"), preferredStyle: .alert)
 			
+			// Note that this alert looks slightly different than the design because I used a standard alert.
 			alert.addAction(UIAlertAction(title: NSLocalizedString("OK", comment: "OK Alert button"), style: .default, handler: { (action) in
 				self.ideaToDelete = self.ideas[indexPath.row]
 				
+				// Let's let the responder chain handle it
 				UIApplication.shared.sendAction(#selector(RootViewController.deleteIdea), to: nil, from: self, for: nil)
 			}))
 			alert.addAction(UIAlertAction(title: NSLocalizedString("Cancel", comment: "Cancel action title"), style: .cancel, handler: nil))
@@ -84,6 +88,8 @@ class IdeaTableViewController: UIViewController, UITableViewDataSource, UITableV
 		self.present(actions, animated: true, completion: nil)
 	}
 	
+	// Enums don't work well in practice even though they do in conception because you have to access the raw value (or provide a constructor from Tag to Int). At this years WWDC, I saw that
+	// the cocoa team has started using structs with typealiases and then static consts. That looks interesting.
 	enum Tags: Int {
 		case borderedView = 1
 		case hairlineView = 2
@@ -111,6 +117,8 @@ class IdeaTableViewController: UIViewController, UITableViewDataSource, UITableV
 		let idea = self.ideas[indexPath.row]
 		let cell = tableView.dequeueReusableCell(withIdentifier: "IdeaCell", for: indexPath)
 		
+		
+		// This is a bit wasteful. If I was worried about performance, I would just subclass UITableViewCell
 		let borderedViewLayer = cell.viewWithTag(Tags.borderedView.rawValue)!.layer
 		
 		borderedViewLayer.shadowOpacity = 0.33

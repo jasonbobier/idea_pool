@@ -30,6 +30,8 @@ class IdeaTableViewController: UIViewController, UITableViewDataSource, UITableV
 			self.gotIdeasLabel.isHidden = true
 		}
 		
+		// Magic number!! lol... I added this just because I was annoyed with the button covering some of the text in the cells. The correct way to do it is to adjust the content offset after
+		// layout has finished.
 		self.tableView.contentInset.bottom += 95
 	}
 	

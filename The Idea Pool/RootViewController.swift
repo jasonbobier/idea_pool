@@ -140,7 +140,7 @@ class RootViewController: UIViewController {
 	
 	
 	// Networking functions should be pulled out into their own class in non-demo app. They also need better error handling, secure result checking (i.e. make sure that
-	// the content field doesn't have more than 255 characters, etcc...) and a more consistent interface.
+	// the content field doesn't have more than 255 characters, etc...) and a more consistent interface.
 	@IBAction func signUp(_ sender: Any) {
 		if let signUpViewController = self.childViewControllers[0] as? SignUpViewController {
 			self.signUp(email: signUpViewController.emailTextField.text!, name: signUpViewController.nameTextField.text!, password: signUpViewController.passwordTextField.text!)

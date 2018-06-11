@@ -97,7 +97,7 @@ class RootViewController: UIViewController {
 	}
 	
 	// Change the header depending upon the topmost vc. The interface is strange for the editor because it has a back button too, which is ambiguous.
-	// It isn't enabled now and I would argue to get rid of it. Note that it was never shown begin used in the demo movie.
+	// It isn't enabled now and I would argue to get rid of it. Note that it was never shown used in the demo movie.
 	func updateHeader() {
 		if self.childViewControllers.last! is IdeaEditorViewController {
 			UIViewPropertyAnimator.runningPropertyAnimator(withDuration: 0.25, delay: 0, animations: {
